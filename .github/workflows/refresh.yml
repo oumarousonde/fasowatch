@@ -1,0 +1,14 @@
+name: Actualiser FasoWatch
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Appeler /api/cron
+        run: |
+          curl -fsS --max-time 100 \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            "${{ secrets.SITE_URL }}/api/cron"

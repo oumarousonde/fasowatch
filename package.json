@@ -1,0 +1,13 @@
+{
+  "name": "fasowatch",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "FasoWatch - le radar de l'actualité (Burkina, Afrique, Europe, monde, IA, tech)",
+  "engines": { "node": ">=20" },
+  "scripts": { "test": "node test/run.js" },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.0",
+    "fast-xml-parser": "^4.5.0"
+  }
+}

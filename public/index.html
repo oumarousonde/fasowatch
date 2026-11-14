@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FasoWatch, le radar de l’actualité</title>
+<meta name="description" content="L’actualité du Burkina, de l’Afrique, de l’Europe et du monde, avec l’IA, l’informatique et le business en ligne. Au même endroit, classée par thème.">
+<meta name="theme-color" content="#0F6B3A">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<style>
+:root{--bg:#F4F6F3;--bar:#F4F6F3;--fg:#14211A;--muted:#5B6B62;--line:#D9E0DA;--accent:#0F6B3A;--burkina:#0F6B3A;--afrique:#C8282A;--europe:#2F5DA8;--usa:#7A4FC0;--videos:#C2410C;--monde:#A67F00;color-scheme:light dark}
+@media (prefers-color-scheme:dark){:root{--bg:#0E1512;--bar:#0E1512;--fg:#E8EEE9;--muted:#98A89F;--line:#25322B;--accent:#4FCB86;--burkina:#4FCB86;--afrique:#F0686A;--europe:#7FA6E8;--usa:#B79BF0;--videos:#FB923C;--monde:#E3B93C}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+.top{position:sticky;top:0;z-index:5;background:var(--bar);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px;padding:12px 0 4px}
+.brand svg{width:38px;height:38px;flex:none}
+.brand h1{margin:0;font-size:20px;line-height:1.1;font-weight:700;letter-spacing:-.01em}
+.brand p{margin:2px 0 0;font-size:13px;color:var(--muted)}
+.sweep{transform-origin:60px 60px;animation:sweep 1.8s ease-out 1}
+@keyframes sweep{from{transform:rotate(-200deg);opacity:0}to{transform:rotate(0);opacity:1}}
+@media (prefers-reduced-motion:reduce){.sweep{animation:none}}
+.scroller{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.scroller::-webkit-scrollbar{display:none}
+.regions button{flex:none;min-height:44px;padding:0 12px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent}
+.regions button[aria-selected=true]{color:var(--fg);border-bottom-color:var(--accent)}
+.topics{padding:8px 0 0}
+.topics button{flex:none;min-height:36px;padding:0 12px;border:1px solid var(--line);border-radius:18px;font-size:14px;color:var(--muted)}
+.topics button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:600}
+.search{display:block;width:100%;margin:10px 0 12px;min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--fg);font:inherit}
+.search::placeholder{color:var(--muted)}
+.item{display:grid;grid-template-columns:6px 1fr;gap:12px;padding:16px 0;border-bottom:1px solid var(--line)}
+.mark{border-radius:3px;background:var(--monde)}
+.item[data-r=burkina] .mark{background:var(--burkina)}
+.item[data-r=afrique] .mark{background:var(--afrique)}
+.item[data-r=europe] .mark{background:var(--europe)}
+.item[data-r=usa] .mark{background:var(--usa)}
+.item[data-r=videos] .mark{background:var(--videos)}
+.item h2{margin:0;font-size:18px;line-height:1.35;font-weight:650}
+.item h2 a{text-decoration:none}
+.item h2 a:hover{text-decoration:underline}
+.item .sum{margin:6px 0 0;color:var(--muted);font-size:15px;max-width:68ch}
+.meta{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:8px;font-size:13px;color:var(--muted)}
+.meta b{color:var(--fg);font-weight:600}
+.warn{color:var(--afrique);font-weight:600}
+.lang{border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:12px;line-height:18px}
+.note{margin:0 0 4px;padding:12px 14px;border-left:4px solid var(--videos);background:color-mix(in srgb,var(--videos) 10%,transparent);font-size:14px}
+.msg{padding:40px 0;text-align:center;color:var(--muted)}
+.msg button{margin-top:12px;min-height:44px;padding:0 18px;border:1px solid var(--line);border-radius:10px;color:var(--fg)}
+.more{display:block;margin:20px auto;min-height:44px;padding:0 24px;border:1px solid var(--line);border-radius:10px;font-weight:600}
+footer{padding:8px 0 48px;color:var(--muted);font-size:14px}
+footer button{min-height:44px;text-decoration:underline}
+.src{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.src span:last-child{color:var(--muted);text-align:right}
+.ok{color:var(--burkina);font-weight:600}
+.ko{color:var(--afrique);font-weight:600}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="wrap">
+    <div class="brand">
+      <svg viewBox="0 0 120 120" role="img" aria-label="Logo FasoWatch"><rect width="120" height="120" rx="28" fill="#0F6B3A"/><circle cx="60" cy="60" r="18" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="1.5"/><circle cx="60" cy="60" r="34" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="1.5"/><circle cx="60" cy="60" r="50" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.5"/><g class="sweep"><path d="M60 60 L60 10 A50 50 0 0 1 103.3 85 Z" fill="#EF2B2D" fill-opacity=".9"/><line x1="60" y1="60" x2="60" y2="10" stroke="#fff" stroke-width="2" stroke-linecap="round"/></g><circle cx="84" cy="43" r="6" fill="#FCD116"/><circle cx="60" cy="60" r="4" fill="#fff"/></svg>
+      <div><h1>FasoWatch</h1><p>Le radar de l’actualité</p></div>
+    </div>
+    <div class="scroller regions" id="regions" role="tablist" aria-label="Zone"></div>
+  </div>
+</div>
+<div class="wrap">
+  <div class="scroller topics" id="topics" aria-label="Thème"></div>
+  <input class="search" id="q" type="search" placeholder="Chercher un mot (ex : examen, ministre, IA)" aria-label="Chercher dans les actualités" autocomplete="off">
+  <main id="list" aria-live="polite"></main>
+  <button class="more" id="more" hidden>Voir plus d’articles</button>
+  <footer>
+    <button id="statusBtn" aria-expanded="false">État des sources</button>
+    <div id="status" hidden></div>
+  </footer>
+</div>
+<script>
+const REGIONS=[['tout','Tout'],['burkina','Burkina'],['ministeres','Ministères'],['aes','AES'],['afrique','Afrique'],['europe','Europe'],['usa','États-Unis'],['monde','Monde'],['videos','Vidéos'],['verifier','À vérifier']];
+const TOPICS=[['','Tous les thèmes'],['securite','Sécurité'],['politique','Gouvernement'],['social','Social'],['economie','Économie'],['numerique','Numérique'],['ia','IA'],['cooperation','Coopération'],['education','Éducation'],['sante','Santé'],['agriculture','Agriculture'],['culture_sport','Culture et sport'],['informatique','Informatique'],['business_en_ligne','Business en ligne'],['trading','Trading et crypto'],['autres','Autres']];
+const TOPIC_LABEL=Object.fromEntries(TOPICS.filter(t=>t[0]));
+const REGION_LABEL={burkina:'Burkina',ministeres:'Ministères',aes:'AES',afrique:'Afrique',europe:'Europe',usa:'États-Unis',monde:'Monde',videos:'Vidéo'};
+const PLATFORM_LABEL={tiktok:'TikTok',facebook:'Facebook',whatsapp:'WhatsApp',youtube:'YouTube',x:'X',autre:'Réseau social'};
+const state={region:'tout',topic:'',q:'',next:null};
+const VIDEO_NOTE='Vidéos de créateurs : ce sont des opinions, pas des informations vérifiées. Pour le trading et la crypto, méfie-toi des promesses de gains faciles : personne ne peut garantir des profits.';
+let seq=0,timer=null;
+const $=s=>document.querySelector(s);
+const list=$('#list'),more=$('#more');
+
+function el(tag,attrs={},...kids){
+  const n=document.createElement(tag);
+  for(const[k,v]of Object.entries(attrs)){
+    if(k==='class')n.className=v;
+    else if(k.startsWith('on'))n.addEventListener(k.slice(2),v);
+    else n.setAttribute(k,v);
+  }
+  for(const c of kids.flat()){if(c==null)continue;n.append(c.nodeType?c:document.createTextNode(c))}
+  return n;
+}
+const safeHref=u=>/^https?:\/\//i.test(u)?u:'#';
+function ago(iso){
+  const s=Math.max(0,(Date.now()-new Date(iso))/1000),m=s/60,h=m/60,d=h/24;
+  if(s<60)return 'à l’instant';
+  if(m<60)return `il y a ${Math.floor(m)} min`;
+  if(h<24)return `il y a ${Math.floor(h)} h`;
+  if(d<7)return `il y a ${Math.floor(d)} j`;
+  return new Date(iso).toLocaleDateString('fr-FR',{day:'numeric',month:'short'});
+}
+async function getJSON(url){
+  const r=await fetch(url);
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  return r.json();
+}
+function message(text,retry){
+  list.replaceChildren(el('div',{class:'msg'},el('p',{},text),retry?el('button',{onclick:()=>load(true)},'Réessayer'):null));
+  more.hidden=true;
+}
+function renderChips(){
+  $('#regions').replaceChildren(...REGIONS.map(([id,label])=>el('button',{role:'tab','aria-selected':String(state.region===id),onclick:()=>{state.region=id;renderChips();load(true)}},label)));
+  const tp=$('#topics');
+  tp.hidden=state.region==='verifier';
+  $('#q').hidden=state.region==='verifier';
+  tp.replaceChildren(...TOPICS.map(([id,label])=>el('button',{'aria-pressed':String(state.topic===id),onclick:()=>{state.topic=id;renderChips();load(true)}},label)));
+}
+function articleRow(a){
+  const first=['videos','burkina','afrique','europe','usa','monde'].find(r=>a.regions.includes(r))||'monde';
+  const zones=a.regions.map(r=>REGION_LABEL[r]).filter(Boolean).join(', ');
+  const topics=a.topics.map(t=>TOPIC_LABEL[t]).filter(Boolean).join(', ');
+  return el('article',{class:'item','data-r':first},
+    el('span',{class:'mark','aria-hidden':'true'}),
+    el('div',{},
+      el('h2',{},el('a',{href:safeHref(a.url),target:'_blank',rel:'noopener noreferrer'},a.title)),
+      a.summary?el('p',{class:'sum'},a.summary):null,
+      el('div',{class:'meta'},el('b',{},a.source),a.lang==='en'?el('span',{class:'lang',title:'Article en anglais'},'EN'):null,el('span',{},ago(a.publishedAt)),el('span',{},zones),el('span',{},topics))));
+}
+function tipRow(t){
+  return el('article',{class:'item','data-r':'afrique'},
+    el('span',{class:'mark','aria-hidden':'true'}),
+    el('div',{},
+      el('h2',{},el('a',{href:safeHref(t.url),target:'_blank',rel:'noopener noreferrer'},t.title)),
+      t.note?el('p',{class:'sum'},t.note):null,
+      el('div',{class:'meta'},el('b',{},PLATFORM_LABEL[t.platform]||'Réseau social'),el('span',{class:'warn'},'Non vérifié, à confirmer avec une source fiable'),el('span',{},ago(t.createdAt)))));
+}
+async function load(reset){
+  const my=++seq;
+  if(reset){state.next=null;message('Chargement…')}
+  try{
+    if(state.region==='verifier'){
+      const r=await getJSON('/api/tips');
+      if(my!==seq)return;
+      if(!r.items.length)return message('Aucun lien pour le moment. Les informations vues sur TikTok ou Facebook apparaissent ici, séparées des sources fiables.');
+      list.replaceChildren(...r.items.map(tipRow));
+      more.hidden=true;
+      return;
+    }
+    const p=new URLSearchParams();
+    if(state.region!=='tout')p.set('region',state.region);
+    if(state.topic)p.set('topic',state.topic);
+    if(state.q)p.set('q',state.q);
+    if(state.next&&!reset)p.set('before',state.next);
+    const r=await getJSON('/api/news?'+p);
+    if(my!==seq)return;
+    const note=state.region==='videos'?el('p',{class:'note'},VIDEO_NOTE):null;
+    if(reset&&!r.items.length){message('Aucun article pour ce filtre. Les sources sont mises à jour toutes les 30 minutes environ.');if(note)list.prepend(note);return}
+    const rows=r.items.map(articleRow);
+    if(reset)list.replaceChildren(...(note?[note]:[]),...rows);else list.append(...rows);
+    state.next=r.next;
+    more.hidden=!r.next;
+  }catch(e){
+    if(my!==seq)return;
+    if(reset)message('Impossible de charger les actualités. Vérifie ta connexion, puis réessaie.',true);
+    else alert('Impossible de charger la suite. Réessaie dans un instant.');
+  }
+}
+more.addEventListener('click',()=>load(false));
+$('#q').addEventListener('input',e=>{
+  clearTimeout(timer);
+  timer=setTimeout(()=>{state.q=e.target.value.trim();load(true)},400);
+});
+$('#statusBtn').addEventListener('click',async e=>{
+  const box=$('#status'),open=box.hidden;
+  box.hidden=!open;
+  e.target.setAttribute('aria-expanded',String(open));
+  if(!open)return;
+  box.replaceChildren(el('p',{},'Chargement…'));
+  try{
+    const s=await getJSON('/api/status');
+    const bad=s.sources.filter(x=>!x.ok).length;
+    box.replaceChildren(
+      el('p',{},`${s.total} articles enregistrés, ${s.last24h} reçus ces dernières 24 heures. `+(s.sources.length?`${s.sources.length-bad} sources fonctionnent, ${bad} en panne.`:'Aucune mise à jour n’a encore eu lieu.')),
+      ...s.sources.map(x=>el('div',{class:'src'},
+        el('span',{},x.name),
+        el('span',{},x.ok?el('span',{class:'ok'},`OK, ${x.items} articles`):el('span',{class:'ko'},`En panne : ${x.error||'erreur inconnue'}`)))));
+  }catch{box.replaceChildren(el('p',{},'Impossible de lire l’état des sources.'))}
+});
+renderChips();
+load(true);
+</script>
+</body>
+</html>
